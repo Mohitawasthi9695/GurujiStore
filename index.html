@@ -10,6 +10,8 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style-starter.css">
   <!-- Template CSS -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
   <link href="//fonts.googleapis.com/css?family=Oswald:300,400,500,600&display=swap" rel="stylesheet">
   <link href="//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,900&display=swap" rel="stylesheet">
   <!-- Template CSS -->
@@ -38,7 +40,7 @@
 							</a>
 						</li>
 						<li class="transmitvcart galssescart2 cart cart box_1">
-							<form action="#" method="post" class="last">
+							<form action="#" method="post" class="last" id="myForm" name="myForm">
 								<input type="hidden" name="cmd" value="_cart">
 								<input type="hidden" name="display" value="1">
 								<button class="top_transmitv_cart" type="submit" name="submit" value="">
@@ -49,40 +51,116 @@
 						</li>
 					</ul>
 					<!--//right-->
+					<script type="text/javascript">
+						(function(){
+							emailjs.init('4JtbVUKhWFe_WMI36');
+						})();
+						
+						function sendEmail() {
+							// Prevent form submission (if you're using a submit button)
+							event.preventDefault();
+							let names=[];
+							let productnames=[];
+							let productquantity=[];
+							let productprice=[];
+							// Capture dynamically generated names (assuming they are input fields)
+							const subtotalDiv = document.querySelector('.sbmincart-subtotal');
+							const subtotalText = subtotalDiv.innerHTML.trim();
+								const productNameElements = document.querySelectorAll('.sbmincart-name');
+								const productQuantityElements = document.querySelectorAll('.sbmincart-quantity');
+								const productPriceElements = document.querySelectorAll('.sbmincart-price');
+
+								// 2. Loop through product names
+								productNameElements.forEach(function(productNameElement) {
+									const productName = productNameElement.innerHTML.trim();
+									productnames.push(productName);
+								});
+								productQuantityElements.forEach(function(productQuantityElements) {
+									const productN = productQuantityElements.value;
+									productquantity.push(productN);
+								});
+								productPriceElements.forEach(function(productPriceElements) {
+									const productRs = productPriceElements.innerHTML.trim();
+									productprice.push(productRs);
+								});
+
+console.log(productnames);
+console.log(productquantity);
+console.log(productprice);
+							// nameInputs.forEach(input => {
+							// 	let name = input.value.trim();  // Trim any leading/trailing whitespace
+							// 	if (name !== '') {
+							// 		names.push(name);
+							// 	}
+							// });
+					  names.push(subtotalText);
+							// You now have `names` array containing all dynamically generated names
+							console.log(names);  // You can do further processing with this array
+							if (!window.formData || !window.formData.email || !window.formData.Name || typeof window.formData.rememberMe === 'undefined') {
+								alert('Please Login first For order!');
+								return; // Stop execution if any required fields are missing
+							}
+
+						    const { email, Name,Number,rememberMe } = window.formData;	
+							
+							const templateParams = {
+								to_name:'Guruji',
+								email_id:email,  // Replace with recipient's name if needed
+								from_name: Name,
+								number_id:Number,    // Replace with sender's name if needed
+								message_html: `Product: ${productnames.join(', ')},
+							     Quantity: ${productquantity.join(', ')},
+							 	 Price: ${productprice.join(', ')}` 
+							};
+					
+							// Send email using EmailJS
+							emailjs.send('service_87pz6vd', 'template_68nd5pn', templateParams)
+								.then(function(response) {
+									console.log('SUCCESS!', response.status, response.text);
+									alert('Email sent successfully!');
+								}, function(error) {
+									console.log('FAILED...', error);
+									alert('Email could not be sent. Please try again later.');
+								});
+						}
+					</script>
+					
+					
 					<div class="overlay-login text-left">
-						<button type="button" class="overlay-close1">
+						<button type="button" class="overlay-close1" id="closeButton">
 							<i class="fa fa-times" aria-hidden="true"></i>
 						</button>
-						<div class="wrap">
+						<div class="wrap" style="margin-top: 10px;">
+
 							<h5 class="text-center mb-4">Login Now</h5>
 							<div class="login-bghny p-md-5 p-4 mx-auto mw-100">
 								<!--/login-form-->
-								<form action="#" method="post">
+								<form id="loginForm" action="" method="post">
 									<div class="form-group">
 										<p class="login-texthny mb-2">Email address</p>
-										<input type="email" class="form-control" id="exampleInputEmail1"
-											aria-describedby="emailHelp" placeholder="" required="">
-										<small id="emailHelp" class="form-text text-muted">We'll never share your email
-											with anyone else.</small>
+										<input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="" required>
+										<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 									</div>
 									<div class="form-group">
-										<p class="login-texthny mb-2">Password</p>
-										<input type="password" class="form-control" id="exampleInputPassword1"
-											placeholder="" required="">
+										<p class="login-texthny mb-2">Enter Name</p>
+										<input type="text" class="form-control" id="name" placeholder="" required>
+									</div>
+									<div class="form-group">
+										<p class="login-texthny mb-2">Enter Number</p>
+										<input type="number" class="form-control" id="Number" placeholder="" required>
 									</div>
 									<div class="form-check mb-2">
 										<div class="userhny-check">
 											<label class="check-remember container">
-												<input type="checkbox" class="form-check"> <span
-													class="checkmark"></span>
+												<input type="checkbox" id="rememberMe" class="form-check"> <span class="checkmark"></span>
 												<p class="privacy-policy">Remember me</p>
 											</label>
 											<div class="clearfix"></div>
 										</div>
 									</div>
 									<button type="submit" class="submit-login btn mb-4">Sign In</button>
-
 								</form>
+								
 								<!--//login-form-->
 							</div>
 							<!---->
@@ -91,6 +169,43 @@
 				</div>
 			</div>
 			<!--/nav-->
+			<script>
+				// Global variable to store form data
+				var formDataStored = false;
+			
+				document.getElementById('loginForm').addEventListener('submit', function(event) {
+					event.preventDefault(); // Prevent the form from submitting via the browser
+					// Get values from form fields
+					var email = document.getElementById('email').value;
+					var Name = document.getElementById('name').value;
+					var Number = document.getElementById('Number').value;
+					var rememberMe = document.getElementById('rememberMe').checked;
+			
+					// Example: Storing values in variables
+					window.formData = {
+						email: email,
+						Name: Name,
+						Number:Number,
+						rememberMe: rememberMe
+					};
+			
+					console.log(formData); // Output the form data to console (for demonstration)
+			
+					// Set flag indicating form data has been stored
+					formDataStored = true;
+			
+					// Trigger button click after form submission
+					document.getElementById('closeButton').click();
+			
+					// You can perform AJAX request or any further processing here
+				});
+			
+				// Example check to decide whether to show login form
+				if (formDataStored) {
+					document.getElementById('loginForm').style.display = 'none';
+				}
+			</script>
+			
 			<nav class="navbar navbar-expand-lg navbar-light">
 				<div class="container-fluid serarc-fluid">
 					<a class="navbar-brand" href="index.html">
@@ -500,7 +615,7 @@
 							<form action="#" method="post">
 									<input type="hidden" name="cmd" value="_cart">
 									<input type="hidden" name="add" value="1">
-									<input type="hidden" name="transmitv_item" value="Women Maroon Top">
+									<input type="hidden" name="transmitv_item" value="Customize Men-Tshirt">
 									<input type="hidden" name="amount" value="199">
 									<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 										Add to Cart
@@ -531,7 +646,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Men's Pink Shirt">
+											<input type="hidden" name="transmitv_item" value="Named T-shirt">
 											<input type="hidden" name="amount" value="199.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart
@@ -541,7 +656,7 @@
 						</div>
 						<div class="product-content">
 							<h3 class="title"><a href="#">Named T-shirt </a></h3>
-							<span class="price"><del>$775.00</del>$599.99</span>
+							<span class="price"><del>Rs-775.00</del>Rs-599.99</span>
 						</div>
 					</div>
 
@@ -563,7 +678,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Dark Blue Top">
+											<input type="hidden" name="transmitv_item" value="Design T-Shirt">
 											<input type="hidden" name="amount" value="299.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart
@@ -595,7 +710,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Women Tunic">
+											<input type="hidden" name="transmitv_item" value="Women T-shirt">
 											<input type="hidden" name="amount" value="299.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart
@@ -627,7 +742,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Yellow T-Shirt">
+											<input type="hidden" name="transmitv_item" value="Printed Mug">
 											<input type="hidden" name="amount" value="299.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart
@@ -659,7 +774,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Straight Kurta">
+											<input type="hidden" name="transmitv_item" value="Phone Cover">
 											<input type="hidden" name="amount" value="699.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart
@@ -723,7 +838,7 @@
 									<form action="#" method="post">
 											<input type="hidden" name="cmd" value="_cart">
 											<input type="hidden" name="add" value="1">
-											<input type="hidden" name="transmitv_item" value="Blue Sweater">
+											<input type="hidden" name="transmitv_item" value="Customize Photo">
 											<input type="hidden" name="amount" value="499.99">
 											<button type="submit" class="transmitv-cart ptransmitv-cart add-to-cart">
 												Add to Cart

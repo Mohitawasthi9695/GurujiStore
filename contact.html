@@ -9,7 +9,7 @@ Author URL: http://w3layouts.com
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>SpryStore E-commerce Category Bootstrap Responsive Website Template | Contact :: W3layouts</title>
+  <title>GurujiStore|Customize Product</title>
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style-starter.css">
   <!-- Template CSS -->
@@ -43,7 +43,7 @@ Author URL: http://w3layouts.com
                 </a>
               </li>
               <li class="transmitvcart galssescart2 cart cart box_1">
-                <form action="#" method="post" class="last">
+                <form action="#" method="post" class="last" id="myForm" name="myForm">
                   <input type="hidden" name="cmd" value="_cart">
                   <input type="hidden" name="display" value="1">
                   <button class="top_transmitv_cart" type="submit" name="submit" value="">
@@ -54,38 +54,115 @@ Author URL: http://w3layouts.com
               </li>
             </ul>
             <!--//right-->
-            <div class="overlay-login text-left">
-              <button type="button" class="overlay-close1">
+            <script type="text/javascript">
+              (function(){
+                emailjs.init('4JtbVUKhWFe_WMI36');
+              })();
+              
+              function sendEmail() {
+                // Prevent form submission (if you're using a submit button)
+                event.preventDefault();
+                let names=[];
+                let productnames=[];
+                let productquantity=[];
+                let productprice=[];
+                // Capture dynamically generated names (assuming they are input fields)
+                const subtotalDiv = document.querySelector('.sbmincart-subtotal');
+                const subtotalText = subtotalDiv.innerHTML.trim();
+                  const productNameElements = document.querySelectorAll('.sbmincart-name');
+                  const productQuantityElements = document.querySelectorAll('.sbmincart-quantity');
+                  const productPriceElements = document.querySelectorAll('.sbmincart-price');
+  
+                  // 2. Loop through product names
+                  productNameElements.forEach(function(productNameElement) {
+                    const productName = productNameElement.innerHTML.trim();
+                    productnames.push(productName);
+                  });
+                  productQuantityElements.forEach(function(productQuantityElements) {
+                    const productN = productQuantityElements.value;
+                    productquantity.push(productN);
+                  });
+                  productPriceElements.forEach(function(productPriceElements) {
+                    const productRs = productPriceElements.innerHTML.trim();
+                    productprice.push(productRs);
+                  });
+  
+  console.log(productnames);
+  console.log(productquantity);
+  console.log(productprice);
+                // nameInputs.forEach(input => {
+                // 	let name = input.value.trim();  // Trim any leading/trailing whitespace
+                // 	if (name !== '') {
+                // 		names.push(name);
+                // 	}
+                // });
+              names.push(subtotalText);
+                // You now have `names` array containing all dynamically generated names
+                console.log(names);  // You can do further processing with this array
+                if (!window.formData || !window.formData.email || !window.formData.Name || typeof window.formData.rememberMe === 'undefined') {
+                  alert('Please Login first For order!');
+                  return; // Stop execution if any required fields are missing
+                }
+  
+                  const { email, Name,Number,rememberMe } = window.formData;	
+                
+                const templateParams = {
+                  to_name:'Guruji',
+                  email_id:email,  // Replace with recipient's name if needed
+                  from_name: Name,
+                  number_id:Number,    // Replace with sender's name if needed
+                  message_html: `Product: ${productnames.join(', ')},
+                     Quantity: ${productquantity.join(', ')},
+                    Price: ${productprice.join(', ')}` 
+                };
+            
+                // Send email using EmailJS
+                emailjs.send('service_87pz6vd', 'template_68nd5pn', templateParams)
+                  .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert('Email sent successfully!');
+                  }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Email could not be sent. Please try again later.');
+                  });
+              }
+            </script>
+            
+            <div class="overlay-login text-left" style="padding: 3em 3em 0.2em 3em;">
+              <button type="button" class="overlay-close1" id="closeButton">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </button>
-              <div class="wrap">
+              <div class="wrap" style="margin-top: 10px;">
+  
                 <h5 class="text-center mb-4">Login Now</h5>
                 <div class="login-bghny p-md-5 p-4 mx-auto mw-100">
                   <!--/login-form-->
-                  <form action="#" method="post">
+                  <form id="loginForm" action="" method="post">
                     <div class="form-group">
                       <p class="login-texthny mb-2">Email address</p>
-                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="" required="">
-                      <small id="emailHelp" class="form-text text-muted">We'll never share your email
-                        with anyone else.</small>
+                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="" required>
+                      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
-                      <p class="login-texthny mb-2">Password</p>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="" required="">
+                      <p class="login-texthny mb-2">Enter Name</p>
+                      <input type="text" class="form-control" id="name" placeholder="" required>
+                    </div>
+                    <div class="form-group">
+                      <p class="login-texthny mb-2">Enter Number</p>
+                      <input type="number" class="form-control" id="Number" placeholder="" required>
                     </div>
                     <div class="form-check mb-2">
                       <div class="userhny-check">
                         <label class="check-remember container">
-                          <input type="checkbox" class="form-check"> <span class="checkmark"></span>
+                          <input type="checkbox" id="rememberMe" class="form-check"> <span class="checkmark"></span>
                           <p class="privacy-policy">Remember me</p>
                         </label>
                         <div class="clearfix"></div>
                       </div>
                     </div>
                     <button type="submit" class="submit-login btn mb-4">Sign In</button>
-
                   </form>
+                  
                   <!--//login-form-->
                 </div>
                 <!---->
@@ -94,10 +171,46 @@ Author URL: http://w3layouts.com
           </div>
         </div>
         <!--/nav-->
+        <script>
+          // Global variable to store form data
+          var formDataStored = false;
+        
+          document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting via the browser
+            // Get values from form fields
+            var email = document.getElementById('email').value;
+            var Name = document.getElementById('name').value;
+            var Number = document.getElementById('Number').value;
+            var rememberMe = document.getElementById('rememberMe').checked;
+        
+            // Example: Storing values in variables
+            window.formData = {
+              email: email,
+              Name: Name,
+              Number:Number,
+              rememberMe: rememberMe
+            };
+        
+            console.log(formData); // Output the form data to console (for demonstration)
+        
+            // Set flag indicating form data has been stored
+            formDataStored = true;
+        
+            // Trigger button click after form submission
+            document.getElementById('closeButton').click();
+        
+            // You can perform AJAX request or any further processing here
+          });
+        
+          // Example check to decide whether to show login form
+          if (formDataStored) {
+            document.getElementById('loginForm').style.display = 'none';
+          }
+        </script>
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="container-fluid serarc-fluid">
             <a class="navbar-brand" href="index.html">
-              Spry<span class="lohny">S</span>tore</a>
+              Guru<span class="lohny">Ji</span>tore</a>
             <!-- if logo is image enable this   
                     <a class="navbar-brand" href="#index.html">
                       <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
@@ -175,22 +288,22 @@ Author URL: http://w3layouts.com
             <div class="cont-details">
               <h3 class="hny-title mb-0">Get in <span>touch</span></h5>
               <p class="mb-5">We're ready to lead you into the future with Business Services</p>
-              <p class="margin-top"><span class="texthny">Call Us : </span> <a href="tel:+(21) 255 999 8899">+(21)
-                  255 999 8899</a></p>
-              <p> <span class="texthny">Email : </span> <a href="mailto:info@example.com">
-                  info@example.com</a></p>
-              <p class="margin-top"> 433 California St, Suite 300
-                San Francisco, CA 94104, USA </p>
+              <p class="margin-top"><span class="texthny">Call Us : </span> <a href="tel:+(91) 9555940287">+(91)
+                  9555940287</a></p>
+              <p> <span class="texthny">Email : </span> <a href="mailto:gurujicommunication24@gmail.com">
+                gurujicommunication24@gmail.com</a></p>
+              <p class="margin-top">
+                Near Kv iiim luvknow, IIM Rd, Mubarakpur, Lucknow, Uttar Pradesh 226013 </p>
             </div>
             <div class="hours">
               <h3 class="hny-title">Working <span>Hours</span></h5>
               <h6>Business Service:</h6>
-              <p> Monday to Friday 8.00 am - 6.00 pm</p>
-              <p> Saturday and Sunday - Closed</p>
+              <p> Monday to Sunday 9:00 am - 10:00 pm</p>
+              <p> All Days Open !</p>
               <h6 class="margin-top">Customer support:</h6>
-              <p> Monday to Friday 8.00 am - 6.00 pm</p>
-              <p> Saturday 10.00 am - 4.00 pm</p>
-              <p> Sunday - Closed</p>
+              <p> Monday to Saturday 10:00 am - 4:00 pm</p>
+              <p> Sunday 6:00 pm - 10:00 pm</p>
+              <p>All Days Open !</p>
             </div>
           </div>
           <div class="col-lg-6 map">
@@ -222,177 +335,197 @@ Author URL: http://w3layouts.com
   </section>
   <!-- //contacts -->
 
-
   <section class="w3l-footer-22">
-      <!-- footer-22 -->
-      <div class="footer-hny py-5">
-          <div class="container py-lg-5">
-              <div class="text-txt row">
-                  <div class="left-side col-lg-4">
-                      <h3><a class="logo-footer" href="index.html">
-                            Spry<span class="lohny">S</span>tore</a></h3>
-                      <!-- if logo is image enable this   
-                                    <a class="navbar-brand" href="#index.html">
-                                        <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
-                                    </a> -->
-                      <p>Lorem ipsum dolor sit amet,Ea consequuntur illum facere aperiam sequi optio consectetur.Vivamus
-                          a ligula quam. Ut blandit eu leo non suscipit. </p>
-                      <ul class="social-footerhny mt-lg-5 mt-4">
+    <!-- footer-22 -->
+    <div class="footer-hny py-5">
+        <div class="container py-lg-5">
+            <div class="text-txt row">
+                <div class="left-side col-lg-4">
+                    <h3><a class="logo-footer" href="index.html">
+                          Guru<span class="lohny">Ji</span>Store</a></h3>
+                    <!-- if logo is image enable this   
+                                  <a class="navbar-brand" href="#index.html">
+                                      <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
+                                  </a> -->
+                    <p>We are powered By gurujicommunication , We provide multiple online or product services custom design or printing. </p>
+                    <ul class="social-footerhny mt-lg-5 mt-4">
 
-                          <li><a class="facebook" href="#"><span class="fa fa-facebook" aria-hidden="true"></span></a>
-                          </li>
-                          <li><a class="twitter" href="#"><span class="fa fa-twitter" aria-hidden="true"></span></a>
-                          </li>
-                          <li><a class="google" href="#"><span class="fa fa-google-plus" aria-hidden="true"></span></a>
-                          </li>
-                          <li><a class="instagram" href="#"><span class="fa fa-instagram" aria-hidden="true"></span></a>
-                          </li>
-                      </ul>
-                  </div>
+                        <li><a class="facebook" href="#"><span class="fa fa-facebook" aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="twitter" href="#"><span class="fa fa-twitter" aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="google" href="https://www.google.com/search?q=gurujicommunication+mubarakpur+iim+road&sca_esv=6182fbdd58dbe34a&sca_upv=1&rlz=1C1CHBF_enIN1055IN1055&sxsrf=ADLYWILXmu9-c_hubbYddY35PoxAsFsumg%3A1719252405246&ei=tbV5ZrfUDuCbseMPsIyR2AI&oq=gurujicommunication+mubarakpur+iim+&gs_lp=Egxnd3Mtd2l6LXNlcnAiI2d1cnVqaWNvbW11bmljYXRpb24gbXViYXJha3B1ciBpaW0gKgIIADIHECEYoAEYCjIHECEYoAEYCjIHECEYoAEYCjIHECEYoAEYCjIHECEYoAEYCkiMOFD2DVijJnABeACQAQCYAdMCoAHpD6oBBzAuMi41LjG4AQHIAQD4AQGYAgegAvEOwgIIEAAYgAQYogSYAwCIBgGSBwUyLTUuMqAHtCs&sclient=gws-wiz-serp#ip=1"><span class="fa fa-google-plus" aria-hidden="true"></span></a>
+                        </li>
+                        <li><a class="instagram" href="https://www.instagram.com/mohitawasthi9695?igsh=Z2t6YnJtcmU2YzFs"><span class="fa fa-instagram" aria-hidden="true"></span></a>
+                        </li>
+                    </ul>
+                </div>
 
-                  <div class="right-side col-lg-8 pl-lg-5">
-                      <h4>Women's Day Special Offer
-                        All Branded Sandals are Flat 50% Discount</h4>
-                      <div class="sub-columns">
-                          <div class="sub-one-left">
-                              <h6>Useful Links</h6>
-                              <div class="footer-hny-ul">
-                                  <ul>
-                                      <li><a href="index.html">Home</a></li>
-                                      <li><a href="about.html">About</a></li>
-                                      <li><a href="#">Blog</a></li>
-                                      <li><a href="contact.html">Contact</a></li>
-                                  </ul>
-                                  <ul>
-                                      <li><a href="#">Careers</a></li>
-                                      <li><a href="#">Privacy Policy</a></li>
-                                      <li><a href="#">Terms and Conditions</a></li>
-                                      <li><a href="contact.html">Support</a></li>
-                                  </ul>
-                              </div>
+                <div class="right-side col-lg-8 pl-lg-5">
+                    <h4>Summer Special Offer
+                      All Branded T-shirt are Flat 50% Discount</h4>
+                    <div class="sub-columns">
+                        <div class="sub-one-left">
+                            <h6>Useful Links</h6>
+                            <div class="footer-hny-ul">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                </ul>
+                                <ul>
+                                    <li><a href="#">Careers</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Terms and Conditions</a></li>
+                                    <li><a href="contact.html">Support</a></li>
+                                </ul>
+                            </div>
 
-                          </div>
-                          <div class="sub-two-right">
-                              <h6>Our Store</h6>
-                              <p class="mb-5">49436 Broaddus Honey Court Avenue, Madisonville KY 95020, United States of America</p>
+                        </div>
+                        <div class="sub-two-right">
+                            <h6>Our Store</h6>
+                            <p class="mb-5">Near Kv iim luvknow, IIM Rd, Mubarakpur, Lucknow, Uttar Pradesh 226013</p>
 
-                              <h6>We accept:</h6>
-                              <ul>
-                                  <li><a class="pay-method" href="#"><span class="fa fa-cc-visa"
-                                              aria-hidden="true"></span></a>
-                                  </li>
-                                  <li><a class="pay-method" href="#"><span class="fa fa-cc-mastercard"
-                                              aria-hidden="true"></span></a>
-                                  </li>
-                                  <li><a class="pay-method" href="#"><span class="fa fa-cc-paypal"
-                                              aria-hidden="true"></span></a>
-                                  </li>
-                                  <li><a class="pay-method" href="#"><span class="fa fa-cc-amex"
-                                              aria-hidden="true"></span></a>
-                                  </li>
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="below-section row">
-                  <div class="columns col-lg-6">
-                      <ul class="jst-link">
-                          <li><a href="#">Privacy Policy </a> </li>
-                          <li><a href="#">Term of Service</a></li>
-                          <li><a href="contact.html">Customer Care</a> </li>
-                      </ul>
-                  </div>
-                  <div class="columns col-lg-6 text-lg-right">
-                      <p>© 2020 SpryStore. All rights reserved. Design by <a href="https://w3layouts.com/" target="_blank">
-                              W3Layouts</a>
-                      </p>
-                  </div>
-                  <button onclick="topFunction()" id="movetop" title="Go to top">
-                      <span class="fa fa-angle-double-up"></span>
-                  </button>
-              </div>
-          </div>
-      </div>
-      <!-- //titels-5 -->
-      <!-- move top -->
+                            <h6>We accept:</h6>
+                            <ul>
+              <li>
+                <a href="https://wa.me/+919555940287" class="text-white">Payment On Whatsapp Or Offline.</a>
+              </li>
+                                <!-- <li><a class="pay-method" href="#"><span class="fa fa-cc-visa"
+                                            aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-mastercard"
+                                            aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-paypal"
+                                            aria-hidden="true"></span></a>
+                                </li>
+                                <li><a class="pay-method" href="#"><span class="fa fa-cc-amex"
+                                            aria-hidden="true"></span></a>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="below-section row">
+                <div class="columns col-lg-6">
+                    <ul class="jst-link">
+                        <li><a href="#">Privacy Policy </a> </li>
+                        <li><a href="#">Term of Service</a></li>
+                        <li><a href="contact.html">Customer Care</a> </li>
+                    </ul>
+                </div>
+                <div class="columns col-lg-6 text-lg-right">
+                    <p>© 2024 GurujiStore. All rights reserved. Design by <a href="https://w3layouts.com/" target="_blank">
+                            MohitAwasthi9695</a>
+                    </p>
+                </div>
+                <button onclick="topFunction()" id="movetop" title="Go to top">
+                    <span class="fa fa-angle-double-up"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- //titels-5 -->
+    <!-- move top -->
 
-      <script>
-          // When the user scrolls down 20px from the top of the document, show the button
-          window.onscroll = function () {
-              scrollFunction()
-          };
+    <script>
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction()
+        };
 
-          function scrollFunction() {
-              if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                  document.getElementById("movetop").style.display = "block";
-              } else {
-                  document.getElementById("movetop").style.display = "none";
-              }
-          }
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("movetop").style.display = "block";
+            } else {
+                document.getElementById("movetop").style.display = "none";
+            }
+        }
 
-          // When the user clicks on the button, scroll to the top of the document
-          function topFunction() {
-              document.body.scrollTop = 0;
-              document.documentElement.scrollTop = 0;
-          }
-      </script>
-      <!-- /move top -->
-  </section>
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+    <!-- /move top -->
+</section>
 
 
-  </body>
+</body>
 
-  </html>
+</html>
 
 <script src="assets/js/jquery-3.3.1.min.js"></script>
 <script src="assets/js/jquery-2.1.4.min.js"></script>
 <!--/login-->
 <script>
-		$(document).ready(function () {
-			$(".button-log a").click(function () {
-				$(".overlay-login").fadeToggle(200);
-				$(this).toggleClass('btn-open').toggleClass('btn-close');
-			});
-		});
-		$('.overlay-close1').on('click', function () {
-			$(".overlay-login").fadeToggle(200);
-			$(".button-log a").toggleClass('btn-open').toggleClass('btn-close');
-			open = false;
-		});
-  </script>
+  $(document).ready(function () {
+    $(".button-log a").click(function () {
+      $(".overlay-login").fadeToggle(200);
+      $(this).toggleClass('btn-open').toggleClass('btn-close');
+    });
+  });
+  $('.overlay-close1').on('click', function () {
+    $(".overlay-login").fadeToggle(200);
+    $(".button-log a").toggleClass('btn-open').toggleClass('btn-close');
+    open = false;
+  });
+</script>
 <!--//login-->
 <script>
 // optional
-		$('#customerhnyCarousel').carousel({
-				interval: 5000
-    });
-  </script>
- <!-- cart-js -->
- <script src="assets/js/minicart.js"></script>
- <script>
-     transmitv.render();
+  $('#customerhnyCarousel').carousel({
+      interval: 5000
+  });
+</script>
+<!-- cart-js -->
+<script src="assets/js/minicart.js"></script>
+<script>
+   transmitv.render();
 
-     transmitv.cart.on('transmitv_checkout', function (evt) {
-         var items, len, i;
+   transmitv.cart.on('transmitv_checkout', function (evt) {
+       var items, len, i;
 
-         if (this.subtotal() > 0) {
-             items = this.items();
+       if (this.subtotal() > 0) {
+           items = this.items();
 
-             for (i = 0, len = items.length; i < len; i++) {}
-         }
-     });
- </script>
- <!-- //cart-js -->
+           for (i = 0, len = items.length; i < len; i++) {}
+       }
+   });
+</script>
+<!-- //cart-js -->
+<!--pop-up-box-->
+<script src="assets/js/jquery.magnific-popup.js"></script>
+<!--//pop-up-box-->
+<script>
+$(document).ready(function () {
+  $('.popup-with-zoom-anim').magnificPopup({
+    type: 'inline',
+    fixedContentPos: false,
+    fixedBgPos: true,
+    overflowY: 'auto',
+    closeBtnInside: true,
+    preloader: false,
+    midClick: true,
+    removalDelay: 300,
+    mainClass: 'my-mfp-zoom-in'
+  });
 
+});
+</script>
+<!--//search-bar-->
 <!-- disable body scroll which navbar is in active -->
 
 <script>
-  $(function () {
-    $('.navbar-toggler').click(function () {
-      $('body').toggleClass('noscroll');
-    })
-  });
+$(function () {
+  $('.navbar-toggler').click(function () {
+    $('body').toggleClass('noscroll');
+  })
+});
 </script>
 <!-- disable body scroll which navbar is in active -->
 <script src="assets/js/bootstrap.min.js"></script>
